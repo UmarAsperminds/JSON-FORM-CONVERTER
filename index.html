@@ -1,0 +1,73 @@
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script type="text/javascript">
+function validateEmail(email) {
+    var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(email);
+}
+$.getJSON( "input.json", function(data){
+    console.log(data)
+    var items = [];
+    $.each( data, function( key, val ) {
+        //items.push("<table width='100%' align='center'>")
+        console.log(key, val)
+        if(val.toString().indexOf('#') != -1){
+            items.push( "<tr><td><label>"+key+"</label></td><td><input type='color' name='favcolor' value='#ff0000'></td></tr><br><br>");
+        }
+        else if(val.toString().indexOf('file') != -1){
+            items.push( "<label>"+key+"</label><input type='file' name='favcolor'><br><br>");
+        }
+        else if((val.toString().match(/,/g) || []).length > 0 && typeof(val)!='object'){
+            var val = val.toString().split(",");
+            var toPush = "<label>"+key+"</label><select multiple>";   
+            for(i=0;i<val.length;i++)
+                toPush += "<option>"+val[i]+"</option>";
+            items.push( toPush + "</select><br><br>");   
+        }
+        else if((val.toString().match(/,/g) || []).length > 0 && typeof(val)=='object'){
+            var val = val.toString().split(",");
+            var toPush = "<label>"+key+"</label><select>";   
+            for(i=0;i<val.length;i++)
+                toPush += "<option>"+val[i]+"</option>";
+            items.push( toPush + "</select><br><br>");   
+        }
+        else if(validateEmail(val))
+            items.push( "<label>"+key+"</label><input type='email' name='favcolor'><br><br>");   
+        
+        else if(val.toString().indexOf(':') != -1 && (val.toString().indexOf(' AM') != -1 || val.toString().indexOf(' PM') != -1))
+            items.push("<label>"+key+"</label><input type='time' name='favcolor'><br><br>");
+        
+        else if( (Date.parse(val)>0 || val==='yyyy/mm/dd' || val=='dd/mm/yyyy') && ( (val.toString().indexOf('/') != -1) || (val.toString().indexOf('-') != -1) ) ){
+            items.push( "<label>"+key+"</label><input type='date'><br><br>");
+        }
+        else if((val.toString().match(/\//ig) || []).length > 0){            
+            var val = val.toString().split("/");
+            var toPush = "<label>"+key+"</label>";   
+            for(i=0;i<val.length;i++)
+                toPush += "<input type='radio' name='"+key+"' value='"+val[i]+"' />"+val[i];
+            items.push( toPush + "<br><br>");   
+        }
+        else if(val.toString().indexOf('://') != -1 || (val.toString().indexOf('http') != -1 || val.toString().indexOf('www') != -1))
+            items.push("<label>"+key+"</label><input type='url' name='favcolor'><br><br>");
+        else if(typeof(val)=='number' || (/^\d+$/.test(val)))
+            items.push( "<label>"+key+"</label><input type='number' value='"+val+"'><br><br>");
+        else if(typeof(val)=='string' && val.length<=40){
+            items.push( "<label>"+key+"</label><input type='text' value='"+val+"'><br><br>");
+        }
+        /*else if(typeof(val)=='object'){
+            var stringify = JSON.stringify(val);
+            for (var i = 0; i < stringify.length; i++) {
+                console.log(stringify[i]['price']);
+            }
+            items.push( "<label>"+key+"</label><select></select><br><br>");
+        }*/
+        else
+            items.push( "<li id='" + key + "'>" + val + "</li><br><br>" );
+    });
+
+    $( "<ul/>", {
+    "class": "my-new-list",
+    html: items.join( "" )
+    }).appendTo( "body" );
+});
+</script>
+<body></body>

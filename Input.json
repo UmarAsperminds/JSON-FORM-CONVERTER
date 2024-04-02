@@ -1,0 +1,18 @@
+{
+
+	"College Name": "PSNA",
+	"Age": 23,
+	"Country": ["Indian", "Australian", "Kenyan"],
+	"DOB": "dd/mm/yyyy",
+	"Gender": "male/female",
+	"Languages Known": "C, Java and Python",
+	"Favourite Color": "#000",
+	"Upload photograph": "file (only png)",
+	"Email": "foo@bob.in",
+	"Start Time": "10:30 AM",
+	"Website Address": "www.google.com",
+	"Title": "Grootan Test",
+	"Sub Title": "Round 2",
+	"CGPA": "10"
+
+}
